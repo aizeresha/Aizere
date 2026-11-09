@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-burgundy;
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: #f1dde5;
+    color: #701637;
+  }
+  :focus-visible {
+    outline: 2px solid #a71950;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-burgundy text-white hover:bg-raspberry;
+  }
+  .btn-accent {
+    @apply btn bg-raspberry text-white hover:bg-burgundy;
+  }
+  .btn-secondary {
+    @apply btn border border-burgundy/25 bg-white/60 text-burgundy hover:border-burgundy hover:bg-white;
+  }
+  .btn-ghost {
+    @apply btn px-3 text-burgundy hover:bg-blush/60;
+  }
+  .card {
+    @apply rounded-3xl border border-burgundy/10 bg-white;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-raspberry;
+  }
+  .chip {
+    @apply inline-flex items-center rounded-full border border-burgundy/15 bg-cream px-2.5 py-1 text-xs font-medium text-ink-soft;
+  }
+  .input {
+    @apply w-full rounded-xl border border-burgundy/20 bg-white px-4 py-3 text-sm text-ink placeholder:text-ink-muted focus:border-raspberry focus:outline-none focus:ring-2 focus:ring-raspberry/20;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink;
+  }
+  .sample-badge {
+    @apply inline-flex items-center gap-1 rounded-full border border-gold/60 bg-gold/10 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A6A35];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+.orbit-slow { animation: orbit-spin 80s linear infinite; transform-origin: center; transform-box: fill-box; }
+.orbit-slower { animation: orbit-spin 140s linear infinite reverse; transform-origin: center; transform-box: fill-box; }
+
+@media print {
+  header, footer, .no-print { display: none !important; }
+  body { background: white; }
+}
