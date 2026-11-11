@@ -176,6 +176,7 @@ const en = {
     videoPlaceholderText:
       "This is a placeholder. The mentor's recorded lesson will appear here once it's published.",
     videoLang: "Video language: {lang}",
+    videoBy: "Video by {src}",
     locked: "Enrol to unlock this lesson",
     lockedText: "This lesson is part of the course. Enrol for free to access all lessons and assignments.",
     loginRequired: "Log in to continue",

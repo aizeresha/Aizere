@@ -14,6 +14,13 @@ export interface QuizQuestion {
   answer: number;
 }
 
+export interface Resource {
+  label: L;
+  url: string;
+  /** Short source name shown next to the link, e.g. "goBILDA". */
+  source?: string;
+}
+
 export interface Lesson {
   id: string;
   type: LessonType;
@@ -29,6 +36,10 @@ export interface Lesson {
   videoUrl?: string;
   /** Language the video is recorded in (videos may exist in one language only). */
   videoLang?: Lang;
+  /** Who made the video, when it isn't ours (e.g. "goBILDA", "REV Robotics"). Shown under the player. */
+  videoCredit?: string;
+  /** Links to build guides, CAD, example code and other free materials. */
+  resources?: Resource[];
   notes?: L[];
   quiz?: QuizQuestion[];
   /** Free preview — visible without enrolment. */

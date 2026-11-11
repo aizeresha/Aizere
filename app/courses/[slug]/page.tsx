@@ -45,7 +45,7 @@ export default function CoursePage() {
             <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-soft">{course.short[lang]}</p>
             <dl className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm text-ink-soft">
               <div className="flex items-center gap-2"><IconClock className="h-4 w-4 text-raspberry" /><dt className="sr-only">{t.common.duration}</dt><dd>{fmt(t.common.hours, { n: course.hours })}</dd></div>
-              <div className="flex items-center gap-2"><IconLayers className="h-4 w-4 text-raspberry" /><dt className="sr-only">{t.common.lessons}</dt><dd>{fmt(t.common.modules, { n: course.modules.length })} · {fmt(t.common.lessons, { n: lessonCount(course) })}</dd></div>
+              <div className="flex items-center gap-2"><IconLayers className="h-4 w-4 text-raspberry" /><dt className="sr-only">{t.lesson.inThisModule}</dt><dd>{fmt(t.common.modules, { n: course.modules.length })} · {fmt(t.common.lessons, { n: lessonCount(course) })}</dd></div>
               <div className="flex items-center gap-2"><IconGlobe className="h-4 w-4 text-raspberry" /><dt className="sr-only">{t.common.languages}</dt><dd>{course.languages.map((x) => t.common.langNames[x]).join(", ")}</dd></div>
             </dl>
             {course.sample && (

@@ -1,4 +1,4 @@
-import type { Course, Lesson, Module, L, LessonType, QuizQuestion } from "../types";
+import type { Course, Lesson, Module, L, LessonType, QuizQuestion, Resource } from "../types";
 import { l } from "./l";
 
 /**
@@ -49,7 +49,259 @@ const finalModule = (task: L): { title: L; lessons: Spec[] } => ({
   ],
 });
 
+/* ------------------------------------------------------------------ */
+/* Real course: built on the free goBILDA and REV Starter Bot videos.  */
+/* ------------------------------------------------------------------ */
+
+const yt = (id: string) => `https://www.youtube-nocookie.com/embed/${id}`;
+const res = (en: string, kz: string, ru: string, url: string, source: string): Resource => ({ label: l(en, kz, ru), url, source });
+
+const GB = "goBILDA";
+const REV = "REV Robotics";
+
+const R = {
+  gbGuide: res("goBILDA Starter Bot — all resources", "goBILDA Starter Bot — барлық материалдар", "goBILDA Starter Bot — все материалы", "https://www.gobilda.com/ftc-starter-bot-resource-guide-2026-2027-season/", GB),
+  gbMecanum: res("Version with mecanum wheels", "Mecanum дөңгелекті нұсқасы", "Версия с колёсами mecanum", "https://www.gobilda.com/ftc-starterbot-base-with-mecanum-wheels-resource-guide-2026-2027/", GB),
+  gbKit: res("goBILDA FTC Starter Kit 2026–27", "goBILDA FTC Starter Kit 2026–27", "Набор goBILDA FTC Starter Kit 2026–27", "https://www.gobilda.com/ftc-starter-kit-2026-2027-season/", GB),
+  gbPdf: res("Assembly instructions (PDF)", "Құрастыру нұсқаулығы (PDF)", "Инструкция по сборке (PDF)", "https://www.gobilda.com/content/user_manuals/3200-2627-0003_assembly-instructions.min.pdf", GB),
+  gbStep: res("CAD model (STEP)", "CAD моделі (STEP)", "CAD-модель (STEP)", "https://www.gobilda.com/content/step_files/3200-2627-0003.zip", GB),
+  gb3d: res("Interactive 3D model", "Интерактивті 3D модель", "Интерактивная 3D-модель", "https://sketchfab.com/models/9882bdfea2874ff0b726a54a335e9858", GB),
+  gbCode: res("Example code (ZIP)", "Үлгі код (ZIP)", "Пример кода (ZIP)", "https://www.gobilda.com/content/downloads/3200-2627-0003_example-code.zip", GB),
+  revGuide: res("REV Starter Bot — all resources", "REV Starter Bot — барлық материалдар", "REV Starter Bot — все материалы", "https://docs.revrobotics.com/ftc-kickoff-concepts/", REV),
+  revBom: res("Bill of materials", "Бөлшектер тізімі", "Список деталей", "https://docs.revrobotics.com/ftc-kickoff-concepts/home/bill-of-materials", REV),
+  revPdf: res("Build guide (PDF)", "Құрастыру нұсқаулығы (PDF)", "Инструкция по сборке (PDF)", "https://www.revrobotics.com/content/technical-resources/DUO/FTC-Kickoff-Concepts/2026-27/2026-27_REV_DUO_FTC_Starter_Bot-Build_Guide_1567.pdf", REV),
+  revDrive: res("Channel Drivetrain build guide", "Channel Drivetrain құрастыру нұсқаулығы", "Инструкция по сборке Channel Drivetrain", "https://docs.revrobotics.com/build-channel-drivetrain", REV),
+  revCad: res("CAD model (Onshape)", "CAD моделі (Onshape)", "CAD-модель (Onshape)", "https://cad.onshape.com/documents/9cb9eb90e973fd37d10ee178/w/b9c02b0f4e09998f08becbd2/e/a55c018c62564f3ea8812a47", REV),
+  revTeleop: res("TeleOp code and configuration", "TeleOp коды және конфигурация", "Код TeleOp и конфигурация", "https://docs.revrobotics.com/ftc-kickoff-concepts/home/programming-teleop-and-auto", REV),
+  revAuto: res("Autonomous code", "Autonomous коды", "Код Autonomous", "https://docs.revrobotics.com/ftc-kickoff-concepts/home/programming-teleop-and-auto/programming-auto", REV),
+  revHello: res("Hello Robot: intro to Blocks programming", "Hello Robot: Blocks бағдарламалауға кіріспе", "Hello Robot: введение в программирование на Blocks", "https://docs.revrobotics.com/duo-control/hello-robot-blocks/welcome", REV),
+  revUpgrades: res("Upgrade ideas", "Жақсарту идеялары", "Идеи для улучшений", "https://docs.revrobotics.com/ftc-kickoff-concepts/home/upgrades", REV),
+};
+
+/**
+ * NOTE on durations: YouTube didn't give us the real video lengths.
+ * The minutes for video lessons below are estimates — check each video and correct them.
+ */
+const starterBot: Course = {
+  slug: "ftc-starter-bot",
+  category: "ftc",
+  levels: ["beginner"],
+  hours: 9,
+  languages: ["en", "kz", "ru"],
+  mentorId: "madina",
+  motif: "gear",
+  sample: false,
+  title: l("Build Your First FTC Robot", "Алғашқы FTC роботыңды құрастыр", "Собери своего первого FTC-робота"),
+  short: l(
+    "Build and program the official goBILDA or REV Starter Bot for the 2026–27 BIOBUZZ™ season, step by step.",
+    "2026–27 BIOBUZZ™ маусымына арналған goBILDA немесе REV Starter Bot роботын қадам-қадаммен құрастырып, бағдарламала.",
+    "Шаг за шагом собери и запрограммируй Starter Bot от goBILDA или REV для сезона 2026–27 BIOBUZZ™."
+  ),
+  description: l(
+    "Every season goBILDA and REV Robotics publish a free Starter Bot: a simple robot that can already play the game, with videos, step-by-step build guides, CAD and example code. This course puts it all in order — watch, build, program, improve. The videos are in English and were made by goBILDA and REV Robotics; every lesson has short notes in Kazakh and Russian so you never get lost. You'll need a goBILDA FTC Starter Kit or a REV FTC Starter Kit V3.1, plus the control electronics listed in Module 1.",
+    "goBILDA мен REV Robotics әр маусым сайын тегін Starter Bot шығарады: ойынды ойнай алатын қарапайым робот, оған бейнелер, қадамдық құрастыру нұсқаулықтары, CAD және үлгі код беріледі. Бұл курс осының бәрін ретімен жинайды — көр, құрастыр, бағдарламала, жетілдір. Бейнелер ағылшын тілінде, оларды goBILDA мен REV Robotics жасаған; әр сабақта қазақ және орыс тілдерінде қысқа конспект бар, сондықтан адаспайсың. Саған goBILDA FTC Starter Kit немесе REV FTC Starter Kit V3.1 және 1-модульде аталған басқару электроникасы керек.",
+    "goBILDA и REV Robotics каждый сезон бесплатно публикуют Starter Bot — простого робота, который уже умеет играть в игру сезона, с видео, пошаговой инструкцией по сборке, CAD и примером кода. В этом курсе всё собрано по порядку: посмотри, собери, запрограммируй, улучши. Видео на английском, их сняли goBILDA и REV Robotics; в каждом уроке есть короткий конспект на казахском и русском, чтобы ты не запутался. Понадобится набор goBILDA FTC Starter Kit или REV FTC Starter Kit V3.1 и электроника управления из модуля 1."
+  ),
+  outcomes: [
+    l("Choose the goBILDA or REV Starter Bot for your kit", "Жинағыңа сай goBILDA не REV Starter Bot таңдау", "Выбрать Starter Bot goBILDA или REV под свой набор"),
+    l("Build a working robot from an official build guide", "Ресми нұсқаулық бойынша жұмыс істейтін робот құрастыру", "Собрать рабочего робота по официальной инструкции"),
+    l("Configure the Control Hub and drive in TeleOp", "Control Hub-ты баптап, TeleOp арқылы басқару", "Настроить Control Hub и управлять роботом в TeleOp"),
+    l("Run and adjust a simple Autonomous", "Қарапайым Autonomous бағдарламасын іске қосып, өзгерту", "Запустить и изменить простой Autonomous"),
+  ],
+  modules: [
+    {
+      id: "ftc-starter-bot-m1",
+      title: l("Module 1: Meet the Starter Bot", "1-модуль: Starter Bot-пен танысу", "Модуль 1: Знакомство со Starter Bot"),
+      lessons: [
+        {
+          id: "m1l1",
+          type: "video",
+          duration: 5, // estimate
+          preview: true,
+          videoUrl: yt("UXOh-F85t0o"),
+          videoLang: "en",
+          videoCredit: GB,
+          title: l("goBILDA Starter Bot: overview", "goBILDA Starter Bot: шолу", "Starter Bot от goBILDA: обзор"),
+          description: l(
+            "goBILDA shows its Starter Bot for BIOBUZZ™ and what it can do in the game.",
+            "goBILDA BIOBUZZ™ маусымына арналған Starter Bot-ын және оның ойында не істей алатынын көрсетеді.",
+            "goBILDA показывает свой Starter Bot для BIOBUZZ™ и что он умеет в игре."
+          ),
+          notes: [
+            l("A Starter Bot is a base to learn on and improve — not a finished competition robot.", "Starter Bot — үйренуге және жетілдіруге арналған негіз, дайын жарыс роботы емес.", "Starter Bot — это база, чтобы учиться и улучшать, а не готовый соревновательный робот."),
+            l("goBILDA's version is built from the 2026–27 goBILDA FTC Starter Kit plus a REV Control Hub.", "goBILDA нұсқасы 2026–27 goBILDA FTC Starter Kit жинағынан және REV Control Hub-тан құрастырылады.", "Версия goBILDA собирается из набора goBILDA FTC Starter Kit 2026–27 и REV Control Hub."),
+            l("There is also a version with mecanum wheels that can drive sideways.", "Бүйірге жүре алатын mecanum дөңгелекті нұсқасы да бар.", "Есть и версия с колёсами mecanum, которая умеет ездить боком."),
+          ],
+          resources: [R.gbGuide, R.gbKit, R.gbMecanum],
+        },
+        {
+          id: "m1l2",
+          type: "video",
+          duration: 3, // estimate
+          videoUrl: yt("xQvEtIjN2Rw"),
+          videoLang: "en",
+          videoCredit: GB,
+          title: l("The Starter Bot in a real match", "Starter Bot нағыз матчта", "Starter Bot в настоящем матче"),
+          description: l(
+            "Watch the goBILDA Starter Bot play a BIOBUZZ™ match. Notice which tasks it does and which it skips.",
+            "goBILDA Starter Bot-ының BIOBUZZ™ матчын қалай ойнайтынын көр. Қай тапсырмаларды орындайтынына және қайсысын өткізіп жіберетініне назар аудар.",
+            "Посмотри, как Starter Bot от goBILDA играет матч BIOBUZZ™. Обрати внимание, какие задачи он выполняет, а какие пропускает."
+          ),
+          notes: [
+            l("Write down every task the robot does and roughly how long each takes — that's the start of your game strategy.", "Робот орындайтын әр тапсырманы және әрқайсысына шамамен қанша уақыт кететінін жазып ал — бұл ойын стратегияңның бастауы.", "Запиши каждую задачу, которую выполняет робот, и примерно сколько времени она занимает, — это начало твоей стратегии."),
+          ],
+        },
+        {
+          id: "m1l3",
+          type: "video",
+          duration: 3, // estimate
+          videoUrl: yt("Azqc3gvZ0LM"),
+          videoLang: "en",
+          videoCredit: REV,
+          title: l("REV DUO Starter Bot: introduction", "REV DUO Starter Bot: таныстыру", "Starter Bot от REV: знакомство"),
+          description: l(
+            "REV Robotics presents its Starter Bot for BIOBUZZ™, built from the FTC Starter Kit V3.1.",
+            "REV Robotics FTC Starter Kit V3.1 жинағынан құрастырылған BIOBUZZ™ Starter Bot-ын таныстырады.",
+            "REV Robotics представляет свой Starter Bot для BIOBUZZ™, собранный из FTC Starter Kit V3.1."
+          ),
+          notes: [
+            l("It collects Pollen, launches it into the Hive and combs Pollen out of Flowers with a servo-powered poker.", "Ол Pollen-ді жинап, Hive-қа лақтырады және серво жетекті таяқшамен Flowers-тен Pollen-ді тарап алады.", "Он собирает Pollen, запускает его в Hive и вычёсывает Pollen из Flowers поркером на сервоприводе."),
+            l("You need: FTC Starter Kit V3.1, DUO Control Bundle and a 2 mm polycarbonate sheet with an 8 mm grid.", "Керек: FTC Starter Kit V3.1, DUO Control Bundle және 8 мм торлы 2 мм поликарбонат парағы.", "Нужно: FTC Starter Kit V3.1, DUO Control Bundle и лист поликарбоната 2 мм с сеткой 8 мм."),
+            l("Both Starter Bots use a REV Control Hub, so the programming part of this course works for either.", "Екі Starter Bot та REV Control Hub қолданады, сондықтан курстың бағдарламалау бөлімі екеуіне де жарайды.", "Оба Starter Bot используют REV Control Hub, поэтому часть курса про программирование подходит для обоих."),
+          ],
+          resources: [R.revGuide, R.revBom],
+        },
+        {
+          id: "m1l4",
+          type: "quiz",
+          duration: 4,
+          title: l("Knowledge check", "Білімді тексеру", "Проверка знаний"),
+          description: l("Three quick questions about module 1.", "1-модуль бойынша үш қысқа сұрақ.", "Три коротких вопроса по модулю 1."),
+          quiz: [
+            q(
+              l("Besides the goBILDA Starter Kit, what else do you need for the goBILDA Starter Bot?", "goBILDA Starter Bot үшін goBILDA Starter Kit-тен басқа не керек?", "Что ещё нужно для Starter Bot от goBILDA, кроме набора goBILDA Starter Kit?"),
+              [l("A 3D printer", "3D принтер", "3D-принтер"), l("A REV Control Hub", "REV Control Hub", "REV Control Hub"), l("Nothing else", "Басқа ештеңе", "Больше ничего")],
+              1
+            ),
+            q(
+              l("What is a Starter Bot for?", "Starter Bot не үшін керек?", "Для чего нужен Starter Bot?"),
+              [l("It's the only robot allowed at competitions", "Жарыста тек осы роботқа рұқсат етіледі", "Только его разрешено выставлять на соревнования"), l("It's only for display", "Тек көрмеге арналған", "Он только для выставки"), l("It's a base to learn on and improve", "Үйренуге және жетілдіруге арналған негіз", "Это база, чтобы учиться и улучшать")],
+              2
+            ),
+            q(
+              l("What does the REV Starter Bot launch into the Hive?", "REV Starter Bot Hive-қа нені лақтырады?", "Что REV Starter Bot запускает в Hive?"),
+              [l("Pollen", "Pollen", "Pollen"), l("Flowers", "Flowers", "Flowers"), l("Batteries", "Батареяларды", "Батарейки")],
+              0
+            ),
+          ],
+        },
+      ],
+    },
+    {
+      id: "ftc-starter-bot-m2",
+      title: l("Module 2: Build the robot", "2-модуль: Роботты құрастыру", "Модуль 2: Сборка робота"),
+      lessons: [
+        {
+          id: "m2l1",
+          type: "video",
+          duration: 10, // estimate
+          videoUrl: yt("CvdBR6HiOWo"),
+          videoLang: "en",
+          videoCredit: REV,
+          title: l("How each mechanism works", "Әр механизм қалай жұмыс істейді", "Как работает каждый механизм"),
+          description: l(
+            "REV engineers walk through the Starter Bot's mechanisms and explain why they designed them this way.",
+            "REV инженерлері Starter Bot механизмдерін көрсетіп, оларды неге осылай жобалағанын түсіндіреді.",
+            "Инженеры REV разбирают механизмы Starter Bot и объясняют, почему они сделаны именно так."
+          ),
+          notes: [
+            l("Pause the video at each mechanism and sketch it: what moves, and which motor or servo drives it.", "Әр механизмде бейнені тоқтатып, эскизін сал: не қозғалады және оны қай мотор не серво қозғалтады.", "Ставь видео на паузу на каждом механизме и зарисуй его: что движется и какой мотор или серво это двигает."),
+            l("The reasons behind design choices are great material for your engineering portfolio.", "Жобалау шешімдерінің себептері — инженерлік портфолиоға тамаша материал.", "Объяснения инженерных решений — отличный материал для портфолио."),
+          ],
+          resources: [R.revCad, R.gb3d],
+        },
+        {
+          id: "m2l2",
+          type: "assignment",
+          duration: 240,
+          title: l("Build your Starter Bot", "Starter Bot-ыңды құрастыр", "Собери свой Starter Bot"),
+          description: l(
+            "Pick the guide that matches your kit and build the robot step by step. Take a photo after every big section (drivetrain, mechanisms, wiring) and submit the photos with one problem you solved along the way.",
+            "Жинағыңа сай нұсқаулықты таңдап, роботты қадам-қадаммен құрастыр. Әр үлкен бөліктен кейін (шасси, механизмдер, сымдар) фото түсір де, жолда шешкен бір мәселеңмен бірге жібер.",
+            "Выбери инструкцию под свой набор и собери робота шаг за шагом. Фотографируй после каждой большой части (шасси, механизмы, проводка) и отправь фото вместе с одной проблемой, которую ты решил по пути."
+          ),
+          notes: [
+            l("Before you start, check the parts list at the beginning of the guide against your kit.", "Бастамас бұрын нұсқаулықтың басындағы бөлшектер тізімін жинағыңмен салыстыр.", "Перед началом сверь список деталей в начале инструкции со своим набором."),
+            l("REV's guide starts from the Channel Drivetrain — build that first.", "REV нұсқаулығы Channel Drivetrain-нен басталады — алдымен соны құрастыр.", "Инструкция REV начинается с Channel Drivetrain — сначала собери его."),
+          ],
+          resources: [R.gbPdf, R.gbStep, R.revPdf, R.revDrive],
+        },
+      ],
+    },
+    {
+      id: "ftc-starter-bot-m3",
+      title: l("Module 3: Program the robot", "3-модуль: Роботты бағдарламалау", "Модуль 3: Программирование робота"),
+      lessons: [
+        {
+          id: "m3l1",
+          type: "video",
+          duration: 20, // estimate
+          videoUrl: yt("4zD8zW_RE34"),
+          videoLang: "en",
+          videoCredit: REV,
+          title: l("Programming TeleOp and Autonomous", "TeleOp және Autonomous бағдарламалау", "Программирование TeleOp и Autonomous"),
+          description: l(
+            "REV walks through the Starter Bot's TeleOp and Autonomous code. The code is available in Blocks, OnBot Java and Android Studio.",
+            "REV Starter Bot-тың TeleOp және Autonomous кодын түсіндіреді. Код Blocks, OnBot Java және Android Studio нұсқаларында бар.",
+            "REV разбирает код TeleOp и Autonomous для Starter Bot. Код есть в Blocks, OnBot Java и Android Studio."
+          ),
+          notes: [
+            l("New to FTC code? Start with Blocks — it runs in the browser and needs no installation.", "FTC кодында жаңасың ба? Blocks-тен баста — ол браузерде жұмыс істейді, ештеңе орнатудың қажеті жоқ.", "Впервые пишешь код для FTC? Начни с Blocks — он работает в браузере и ничего не нужно устанавливать."),
+            l("Device names in your configuration must match the code exactly — e.g. leftDrive, rightDrive, intakeMotor, flywheel.", "Конфигурациядағы құрылғы атаулары кодтағымен дәл сәйкес болуы керек — мысалы, leftDrive, rightDrive, intakeMotor, flywheel.", "Имена устройств в конфигурации должны точно совпадать с кодом — например, leftDrive, rightDrive, intakeMotor, flywheel."),
+            l("REV's Autonomous launches the preloaded game pieces and can start from either side of the field.", "REV Autonomous бағдарламасы алдын ала салынған ойын элементтерін лақтырады және алаңның кез келген жағынан бастай алады.", "Autonomous от REV запускает заранее загруженные игровые элементы и может стартовать с любой стороны поля."),
+          ],
+          resources: [R.revTeleop, R.revAuto, R.revHello, R.gbCode],
+        },
+        {
+          id: "m3l2",
+          type: "assignment",
+          duration: 60,
+          title: l("Drive your robot", "Роботыңды басқар", "Поуправляй своим роботом"),
+          description: l(
+            "Create the configuration on your Control Hub, upload the TeleOp code and drive. Record a 30-second video of the robot doing one game task and submit the link.",
+            "Control Hub-та конфигурация жаса, TeleOp кодын жүкте де, роботты басқар. Роботтың бір ойын тапсырмасын орындаған 30 секундтық бейнесін түсіріп, сілтемесін жібер.",
+            "Создай конфигурацию на Control Hub, загрузи код TeleOp и поуправляй роботом. Сними 30-секундное видео, где робот выполняет одну игровую задачу, и отправь ссылку."
+          ),
+          resources: [R.revTeleop, R.gbCode],
+        },
+      ],
+    },
+    {
+      id: "ftc-starter-bot-m4",
+      title: l("Module 4: Final Project", "4-модуль: Қорытынды жоба", "Модуль 4: Финальный проект"),
+      lessons: [
+        {
+          id: "m4l1",
+          type: "project",
+          duration: 180,
+          title: l("Make it yours: one upgrade", "Өзіңдікі ет: бір жақсарту", "Сделай робота своим: один апгрейд"),
+          description: l(
+            "Improve your Starter Bot with one upgrade — a faster drivetrain, a better intake or a smarter Autonomous. Test before and after, and submit a short write-up with photos or a video showing the difference. A mentor will review it; once approved, you receive your certificate.",
+            "Starter Bot-ыңды бір жақсартумен жетілдір — жылдамырақ шасси, жақсырақ қармау механизмі немесе ақылдырақ Autonomous. Өзгеріске дейін және кейін сынап көр, айырмашылықты көрсететін фото не бейнемен қысқа сипаттама жібер. Ментор тексереді; мақұлданғаннан кейін сертификат аласың.",
+            "Улучши свой Starter Bot одним апгрейдом — быстрее шасси, лучше захват или умнее Autonomous. Протестируй до и после и отправь короткое описание с фото или видео, где видна разница. Ментор проверит работу; после одобрения ты получишь сертификат."
+          ),
+          notes: [
+            l("Change one thing at a time, so you know what made the difference.", "Бір уақытта тек бір нәрсені өзгерт — сонда айырмашылықты не бергенін білесің.", "Меняй что-то одно за раз — так ты поймёшь, что именно дало разницу."),
+          ],
+          resources: [R.revUpgrades, R.gbMecanum],
+        },
+      ],
+    },
+  ],
+};
+
 export const courses: Course[] = [
+  starterBot,
   {
     slug: "intro-to-robotics",
     category: "robotics",

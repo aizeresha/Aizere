@@ -188,6 +188,7 @@ export default function LessonPage() {
               <span className="chip"><Icon className="mr-1 h-3.5 w-3.5" />{t.common.lessonTypes[lesson.type]}</span>
               <span className="chip"><IconClock className="mr-1 h-3.5 w-3.5" />{lesson.duration} {t.common.min}</span>
               {lesson.type === "video" && lesson.videoLang && <span className="chip">{fmt(t.lesson.videoLang, { lang: t.common.langNames[lesson.videoLang] })}</span>}
+              {lesson.type === "video" && lesson.videoUrl && lesson.videoCredit && <span className="chip">{fmt(t.lesson.videoBy, { src: lesson.videoCredit })}</span>}
               {course.sample && <span className="sample-badge">{t.common.sampleContent}</span>}
             </div>
             <h1 className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">{lesson.title[lang]}</h1>
@@ -198,6 +199,22 @@ export default function LessonPage() {
                 <h2 className="flex items-center gap-2 text-lg font-semibold"><IconBook className="h-5 w-5 text-raspberry" />{t.lesson.notes}</h2>
                 <ul className="mt-4 space-y-3">
                   {lesson.notes.map((n, i) => <li key={i} className="flex gap-3 text-ink"><Star size={12} className="mt-1.5 shrink-0 text-gold" />{n[lang]}</li>)}
+                </ul>
+              </section>
+            )}
+
+            {lesson.resources && lesson.resources.length > 0 && (
+              <section className="mt-6 rounded-3xl bg-white p-6 ring-1 ring-burgundy/10">
+                <h2 className="flex items-center gap-2 text-lg font-semibold"><IconArrow className="h-5 w-5 text-raspberry" />{t.lesson.resources}</h2>
+                <ul className="mt-4 space-y-2">
+                  {lesson.resources.map((r) => (
+                    <li key={r.url}>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between gap-3 rounded-xl border border-burgundy/15 px-4 py-3 text-sm hover:border-burgundy/40 hover:bg-cream">
+                        <span className="font-medium text-ink group-hover:text-burgundy">{r.label[lang]}</span>
+                        {r.source && <span className="shrink-0 text-xs text-ink-muted">{r.source} ↗</span>}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </section>
             )}
