@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useApp, fmt } from "@/lib/state";
 import { courses, getCourse, allLessons } from "@/lib/data/courses";
 import { CourseThumb, Star } from "@/components/art";
+import { levelOf } from "@/lib/game/rooms";
 import { IconArrow, IconAward, IconCheck, IconClock, IconInfo, IconPlay, IconUsers, lessonIcon } from "@/components/icons";
 
 export default function Dashboard() {
-  const { t, lang, ready, user, progress, courseProgress, isComplete, review, hasCertificate } = useApp();
+  const { t, lang, ready, user, progress, courseProgress, isComplete, review, hasCertificate, sparks } = useApp();
   const d = t.dashboard;
 
   if (!ready) return <div className="container-site py-24 text-center text-ink-muted">{t.common.loading}</div>;
@@ -40,8 +41,8 @@ export default function Dashboard() {
           <span className="eyebrow"><Star size={11} className="text-gold" />{t.nav.dashboard}</span>
           <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">{fmt(d.welcome, { name: user.firstName })}</h1>
           <p className="mt-2 text-ink-soft">{d.subtitle}</p>
-          <dl className="mt-8 grid max-w-xl grid-cols-3 gap-4">
-            {[[d.stats.courses, enrolled.length], [d.stats.lessons, totalDone], [d.stats.certs, certs.length]].map(([k, v]) => (
+          <dl className="mt-8 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-5">
+            {[[t.game.sparks, sparks], [t.game.levelLabel, levelOf(sparks).level], [d.stats.courses, enrolled.length], [d.stats.lessons, totalDone], [d.stats.certs, certs.length]].map(([k, v]) => (
               <div key={k as string} className="rounded-2xl bg-cream p-4">
                 <dt className="text-xs text-ink-muted">{k}</dt>
                 <dd className="mt-1 font-display text-2xl font-semibold text-burgundy">{v}</dd>
@@ -106,7 +107,7 @@ export default function Dashboard() {
                           <Link href={`/courses/${c.slug}/learn/${ls.id}`} className="font-semibold text-burgundy hover:text-raspberry">{ls.title[lang]}</Link>
                           <p className="text-xs text-ink-muted">{c.title[lang]} · {new Date(s.submittedAt).toLocaleDateString(t.meta.htmlLang)}</p>
                         </div>
-                        <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${s.status === "reviewed" ? "bg-emerald-50 text-emerald-700" : "bg-gold/15 text-[#7A5C2C]"}`}>
+                        <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${s.status === "reviewed" ? "bg-emerald-50 text-emerald-700" : s.status === "needs_work" ? "bg-blush text-raspberry" : "bg-gold/15 text-[#7A5C2C]"}`}>
                           {s.status === "reviewed" ? <IconCheck className="h-3.5 w-3.5" /> : <IconClock className="h-3.5 w-3.5" />}{d.status[s.status]}
                         </span>
                       </div>

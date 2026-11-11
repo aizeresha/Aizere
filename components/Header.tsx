@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { useApp } from "@/lib/state";
 import { LANGS } from "@/lib/types";
 import { Logo } from "./art";
-import { IconMenu, IconX } from "./icons";
+import { IconBolt, IconMenu, IconX } from "./icons";
+import { levelOf } from "@/lib/game/rooms";
 
 export function LangSwitch({ className = "" }: { className?: string }) {
   const { lang, setLang, t } = useApp();
@@ -29,6 +30,19 @@ export function LangSwitch({ className = "" }: { className?: string }) {
   );
 }
 
+function SparksBadge() {
+  const { t, sparks, user } = useApp();
+  if (!user) return null;
+  const lv = levelOf(sparks);
+  return (
+    <Link href="/dashboard" className="inline-flex items-center gap-1.5 rounded-full bg-burgundy px-3 py-1.5 text-xs font-semibold text-cream hover:bg-raspberry" aria-label={`${t.game.sparks}: ${sparks}. ${t.game.levelLabel} ${lv.level}`}>
+      <IconBolt className="h-3.5 w-3.5 text-gold" />
+      <span>{sparks}</span>
+      <span className="hidden rounded-full bg-cream/15 px-1.5 py-0.5 text-[10px] uppercase tracking-wider sm:inline">Lv {lv.level}</span>
+    </Link>
+  );
+}
+
 export default function Header() {
   const { t, user, logout } = useApp();
   const path = usePathname();
@@ -36,7 +50,7 @@ export default function Header() {
   useEffect(() => setOpen(false), [path]);
 
   const links = [
-    { href: "/courses", label: t.nav.courses },
+    { href: "/courses", label: t.nav.map },
     { href: "/mentors", label: t.nav.mentors },
     { href: "/about", label: t.nav.about },
     ...(user ? [{ href: "/dashboard", label: t.nav.dashboard }] : []),
@@ -66,6 +80,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
+          <SparksBadge />
           <LangSwitch />
           {user ? (
             <button onClick={logout} className="btn-ghost">
@@ -83,6 +98,7 @@ export default function Header() {
           )}
         </div>
         <div className="flex items-center gap-2 lg:hidden">
+          <SparksBadge />
           <LangSwitch />
           <button
             className="rounded-full p-2 text-burgundy hover:bg-blush"

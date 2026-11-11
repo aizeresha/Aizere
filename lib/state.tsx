@@ -14,6 +14,7 @@ import en, { type Dict } from "./i18n/en";
 import ru from "./i18n/ru";
 import kz from "./i18n/kz";
 import { courses, allLessons } from "./data/courses";
+import { SPARKS } from "./game/rooms";
 
 const dicts: Record<Lang, Dict> = { en, kz, ru };
 
@@ -35,8 +36,10 @@ export interface Submission {
   lessonId: string;
   text: string;
   link: string;
-  status: "submitted" | "reviewed";
+  /** submitted = waiting for a mentor; reviewed = accepted; needs_work = checked, not accepted yet */
+  status: "submitted" | "reviewed" | "needs_work";
   feedback?: string;
+  checkedBy?: "ai" | "mentor";
   submittedAt: string;
 }
 
@@ -90,10 +93,12 @@ interface Ctx {
   toggleComplete: (slug: string, lessonId: string, value?: boolean) => void;
   courseProgress: (slug: string) => { done: number; total: number; pct: number };
   visit: (slug: string, lessonId: string) => void;
-  submit: (s: Omit<Submission, "status" | "submittedAt">) => void;
+  submit: (s: Omit<Submission, "status" | "submittedAt"> & Partial<Pick<Submission, "status" | "feedback" | "checkedBy">>) => void;
   getSubmission: (slug: string, lessonId: string) => Submission | undefined;
   review: (slug: string, lessonId: string, feedback: string) => void;
   hasCertificate: (slug: string) => boolean;
+  /** Game currency: sparks earned for finished lessons (derived from progress). */
+  sparks: number;
 }
 
 const AppContext = createContext<Ctx | null>(null);
@@ -184,6 +189,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     [progress]
   );
 
+  const sparks = useMemo(
+    () =>
+      courses.reduce((sum, c) => {
+        const done = progress.completed[c.slug] ?? [];
+        return sum + allLessons(c).reduce((s2, ls) => s2 + (done.includes(ls.id) ? SPARKS[ls.type] : 0), 0);
+      }, 0),
+    [progress]
+  );
+
   const value: Ctx = useMemo(
     () => ({
       ready,
@@ -215,7 +229,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         save((p) => ({
           ...p,
           submissions: [
-            { ...s, status: "submitted", submittedAt: new Date().toISOString() },
+            { status: "submitted", ...s, submittedAt: new Date().toISOString() },
             ...p.submissions.filter((x) => !(x.courseSlug === s.courseSlug && x.lessonId === s.lessonId)),
           ],
         })),
@@ -223,8 +237,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       review: (slug, id, feedback) =>
         save((p) => ({
           ...p,
-          submissions: p.submissions.map((s) => (s.courseSlug === slug && s.lessonId === id ? { ...s, status: "reviewed", feedback } : s)),
+          submissions: p.submissions.map((s) => (s.courseSlug === slug && s.lessonId === id ? { ...s, status: "reviewed", feedback, checkedBy: "mentor" } : s)),
         })),
+      sparks,
       hasCertificate: (slug) => {
         const c = courses.find((x) => x.slug === slug);
         if (!c) return false;
@@ -238,7 +253,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [ready, lang, user, progress, save, courseProgress, setLang]
+    [ready, lang, user, progress, save, courseProgress, setLang, sparks]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

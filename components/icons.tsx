@@ -25,4 +25,7 @@ export const IconLayers = (p: P) => base(<><path d="M12 3 2 8l10 5 10-5z" /><pat
 export const IconInfo = (p: P) => base(<><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></>, p);
 export const IconShield = (p: P) => base(<><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z" /><path d="m9 12 2 2 4-4" /></>, p);
 
+export const IconBolt = (p: P) => base(<path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="none" />, p);
+export const IconMap = (p: P) => base(<><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z" /><path d="M9 4v14M15 6v14" /></>, p);
+
 export const lessonIcon = { video: IconPlay, quiz: IconQuiz, assignment: IconTool, project: IconFlag };

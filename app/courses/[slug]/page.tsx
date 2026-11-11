@@ -9,12 +9,20 @@ import { CourseThumb, Avatar, Star } from "@/components/art";
 import { LevelChips } from "@/components/CourseCard";
 import { IconCheck, IconClock, IconGlobe, IconLayers, IconPlay, IconArrow, IconInfo, IconAward, lessonIcon } from "@/components/icons";
 import NotFoundBlock from "@/components/NotFoundBlock";
+import RoomScene from "@/components/game/RoomScene";
+import HowItWorks from "@/components/game/HowItWorks";
+import { useEffect, useState } from "react";
 
 export default function CoursePage() {
   const { slug } = useParams<{ slug: string }>();
   const course = getCourse(slug);
   const { t, lang, user, isEnrolled, enrol, isComplete, courseProgress } = useApp();
   const router = useRouter();
+  const [justBuilt, setJustBuilt] = useState<string | undefined>();
+  useEffect(() => {
+    const b = new URLSearchParams(window.location.search).get("built");
+    if (b) setJustBuilt(b);
+  }, []);
   if (!course) return <NotFoundBlock title={t.course.notFound} />;
 
   const mentor = getMentor(course.mentorId);
@@ -85,6 +93,17 @@ export default function CoursePage() {
             </div>
           </aside>
         </div>
+      </section>
+
+      <section className="container-site pt-10" aria-label={t.game.roomLabel}>
+        <RoomScene course={course} justBuilt={justBuilt} />
+        {!enrolled && (
+          <div className="mt-4 flex flex-col items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 ring-1 ring-burgundy/10 sm:flex-row">
+            <p className="text-sm font-medium text-burgundy">{t.game.enrolToBuild}</p>
+            <button onClick={onEnrol} className="btn-accent py-2.5">{user ? t.course.enrol : t.course.loginToEnrol}</button>
+          </div>
+        )}
+        <div className="mt-6"><HowItWorks /></div>
       </section>
 
       <div className="container-site grid gap-12 py-12 lg:grid-cols-[1.4fr_1fr]">

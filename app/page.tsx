@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { useApp } from "@/lib/state";
-import { courses } from "@/lib/data/courses";
 import { mentors } from "@/lib/data/mentors";
-import CourseCard from "@/components/CourseCard";
+import StationMap from "@/components/game/StationMap";
 import { HeroArt, Star, Avatar } from "@/components/art";
 import { IconArrow, IconGift, IconClock, IconUsers, IconPlay, IconTool, IconLayers, IconUsers as IconFeedback, IconAward } from "@/components/icons";
 
@@ -66,14 +65,13 @@ export default function Home() {
       <section className="container-site py-16 lg:py-24">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <span className="eyebrow">{h.featuredEyebrow}</span>
-            <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">{h.featuredTitle}</h2>
+            <span className="eyebrow">{t.game.mapEyebrow}</span>
+            <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">{t.game.mapTitle}</h2>
+            <p className="mt-3 max-w-2xl text-lg text-ink-soft">{t.game.mapSubtitle}</p>
           </div>
           <Link href="/courses" className="btn-secondary self-start sm:self-auto">{h.featuredAll} <IconArrow className="h-4 w-4" /></Link>
         </div>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {courses.map((c) => <CourseCard key={c.slug} course={c} />)}
-        </div>
+        <div className="mt-10"><StationMap /></div>
       </section>
 
       {/* HOW IT WORKS */}

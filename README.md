@@ -37,6 +37,30 @@ Stack: Next.js (App Router), React, Tailwind CSS. Fonts: Unbounded (display) + I
 - **Partnership form** does not send messages yet.
 - **Courses and mentors are sample content** and are labelled as such in the UI (`sample: true`).
 
+## Game mode
+
+The academy is a space station: **every course is a room, every lesson is an object in it**. An object is a
+blueprint until its lesson is finished, then it gets built. Lessons give **sparks** (video 10, quiz 20,
+assignment 40, project 80); every 100 sparks is a new level.
+
+| What | Where |
+|---|---|
+| Object drawings | `lib/game/art.ts` |
+| Rooms: name, colours, which object stands where (in lesson order), place on the map | `lib/game/rooms.ts` |
+| Room scene, station map, "how it works" strip | `components/game/` |
+
+Adding a course? Add a room for it in `lib/game/rooms.ts` with one object per lesson.
+
+### Automatic check of assignments (AI)
+
+`app/api/check/route.ts` checks a submitted assignment with Claude and either accepts it or says what to add.
+It is **off** until you add the key in Vercel → Project → Settings → Environment Variables:
+
+- `ANTHROPIC_API_KEY` — from console.anthropic.com (set a monthly spending limit there)
+- `ANTHROPIC_MODEL` — optional, default `claude-haiku-5-5`
+
+Without the key, submissions wait for a mentor as before. The AI only reads the student's text, not photos or links.
+
 ## Editing content
 
 - Interface translations: `lib/i18n/en.ts`, `kz.ts`, `ru.ts`

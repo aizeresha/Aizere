@@ -6,6 +6,8 @@ import { courses } from "@/lib/data/courses";
 import type { Category, Lang, Level } from "@/lib/types";
 import CourseCard from "@/components/CourseCard";
 import PageHeader from "@/components/PageHeader";
+import StationMap from "@/components/game/StationMap";
+import HowItWorks from "@/components/game/HowItWorks";
 
 type Dur = "short" | "medium" | "long";
 
@@ -44,8 +46,12 @@ export default function CoursesPage() {
 
   return (
     <>
-      <PageHeader eyebrow={t.courses.eyebrow} title={t.courses.title} text={t.courses.text} />
+      <PageHeader eyebrow={t.game.mapEyebrow} title={t.game.mapTitle} text={t.game.mapSubtitle} />
       <div className="container-site py-10">
+        <StationMap />
+        <div className="mt-8"><HowItWorks /></div>
+        <h2 className="mt-16 text-2xl font-semibold">{t.game.allCourses}</h2>
+        <p className="mt-2 mb-6 text-ink-soft">{t.courses.text}</p>
         <section aria-label={t.courses.filters} className="card grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-[repeat(4,1fr)_auto] lg:items-end">
           <Select label={t.common.category} value={cat} onChange={setCat} options={[all, ...(["robotics", "cad", "programming", "ftc"] as Category[]).map((v) => ({ value: v, label: t.common.categories[v] }))]} />
           <Select label={t.common.level} value={lvl} onChange={setLvl} options={[all, ...(["beginner", "intermediate"] as Level[]).map((v) => ({ value: v, label: t.common.levels[v] }))]} />

@@ -64,6 +64,42 @@
   }
 }
 
+/* ---------- Game: rooms and objects ---------- */
+/* An object that isn't built yet is drawn as a blueprint: the same drawing as dashed blue outlines. */
+.bp * {
+  fill: rgba(236, 243, 255, 0.55) !important;
+  stroke: #2f5fa8 !important;
+  stroke-width: 2.2 !important;
+  stroke-dasharray: 6 4;
+}
+@keyframes build-pop {
+  0% { transform: scale(0.6); opacity: 0.2; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.build-pop { animation: build-pop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; transform-origin: 50% 90%; }
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  40% { transform: scale(1) rotate(45deg); opacity: 1; }
+  100% { transform: scale(0.2) rotate(90deg); opacity: 0; }
+}
+.sparkle { animation: sparkle 1.4s ease-out both; animation-iteration-count: 2; }
+@keyframes next-bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -25%); }
+}
+.next-bounce { animation: next-bounce 1.4s ease-in-out infinite; }
+@keyframes tile-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15%); }
+}
+@keyframes reward-in {
+  from { transform: translateY(16px) scale(0.96); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.tile-bounce { animation: tile-bounce 1.4s ease-in-out infinite; }
+.reward-in { animation: reward-in 0.35s ease-out both; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
